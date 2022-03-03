@@ -6,38 +6,45 @@ const courseSchema = new Schema(
       type: String,
       required: [true, "This is a required field."],
     },
+
     description: String,
-    topics: { type: Schema.Types.ObjectId, ref: "Topic" }, // should it be inside an [] ?
+
+    topics: [{ type: Schema.Types.ObjectId, ref: "Topic" }],
+
     image: Image,
+
     location: {
       type: String,
       required: [true, "This is a required field."],
     },
+
     duration: {
       type: String,
       required: [true, "This is a required field."],
     },
+
     schedule: {
       type: String,
       required: [true, "This is a required field."],
     },
+
     careerServices: {
-      type: Boolean,
+      type: String,
       required: [true, "This is a required field."],
     },
+
     jobGuaranteed: {
-      type: Boolean,
+      type: String,
       required: [true, "This is a required field."],
     },
-    preRequisites: Boolean,
-    isPayed: {
-      type: Boolean,
+
+    preRequisites: String,
+
+    cost: {
+      type: String,
       required: [true, "This is a required field."],
     },
-    financing: {
-      type: Boolean,
-      required: [true, "This is a required field."],
-    },
+
     link: {
       type: String,
       required: [true, "This is a required field."],
