@@ -4,7 +4,7 @@ const courseSchema = new Schema(
   {
     courseName: {
       type: String,
-      required: [true, "This is a required field."],
+      required: [true, "Please provide the name of the course."],
     },
 
     description: String,
@@ -15,33 +15,36 @@ const courseSchema = new Schema(
 
     location: {
       type: String,
-      required: [true, "This is a required field."],
+      required: [true, "The course location is required."],
     },
 
     duration: {
       type: String,
-      required: [true, "This is a required field."],
+      required: [true, "The duration of the course is required."],
     },
 
     schedule: {
       type: String,
-      required: [true, "This is a required field."],
+      enum: ["Full-Time", "Part-Time", "Other"],
+      required: [true, "You must select one option."],
     },
 
     careerServices: {
-      type: String,
+      type: Boolean,
+      enum: ["Yes", "No"],
       required: [true, "This is a required field."],
     },
 
     jobGuaranteed: {
       type: String,
+      enum: ["Yes", "Internship", "No"],
       required: [true, "This is a required field."],
     },
 
     preRequisites: String,
 
     cost: {
-      type: String,
+      type: Number,
       required: [true, "This is a required field."],
     },
 

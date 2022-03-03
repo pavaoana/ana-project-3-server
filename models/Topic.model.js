@@ -2,7 +2,11 @@ const { Schema, model } = require("mongoose");
 
 const topicSchema = new Schema(
   {
-    topicName: String,
+    topicName: {
+      type: String,
+      unique: true,
+      required: [true, "Please provide a name for the topic you are creating."],
+    },
     description: String,
   },
   {
