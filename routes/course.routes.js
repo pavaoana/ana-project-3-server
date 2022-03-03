@@ -3,6 +3,13 @@ const { isAuthenticated } = require("../middleware/jwt.middleware");
 const Course = require("../models/Course.model");
 const mongoose = require("mongoose");
 
+router.get("/all", (req, res, next) => {
+  Course.find()
+    .populate("topics")
+    .then((allCourses) => res.json(allCourses))
+    .catch((err) => res.json(err));
+});
+
 router.post("/create", isAuthenticated, (req, res) => {
   const courseDetails = {
     courseName: req.body.courseName,
@@ -30,13 +37,6 @@ router.post("/create", isAuthenticated, (req, res) => {
         error: err,
       });
     });
-});
-
-router.get("/", (req, res, next) => {
-  Course.find()
-    .populate("topics")
-    .then((allCourses) => res.json(allCourses))
-    .catch((err) => res.json(err));
 });
 
 router.get("/:courseId", (req, res, next) => {

@@ -11,7 +11,7 @@ const courseSchema = new Schema(
 
     topics: [{ type: Schema.Types.ObjectId, ref: "Topic" }],
 
-    image: Image,
+    image: String,
 
     location: {
       type: String,

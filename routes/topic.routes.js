@@ -10,7 +10,7 @@ router.post("/", isAuthenticated, (req, res) => {
   // console.log(courseId);
 
   const topicDetails = {
-    name: req.body.name,
+    topicName: req.body.topicName,
     description: req.body.description,
     course: courseId,
   };
