@@ -5,7 +5,7 @@ const { isAuthenticated } = require("../middleware/jwt.middleware");
 const Topic = require("../models/Topic.model");
 const Course = require("../models/Course.model");
 
-router.post("/", isAuthenticated, (req, res) => {
+router.post("/add", isAuthenticated, (req, res) => {
   const { courseId } = req.body;
   // console.log(courseId);
 

@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 const Course = require("../models/Course.model");
+const Topic = require("../models/Topic.model");
 const mongoose = require("mongoose");
 
 router.get("/all", (req, res, next) => {
@@ -10,20 +11,20 @@ router.get("/all", (req, res, next) => {
     .catch((err) => res.json(err));
 });
 
-router.post("/create", isAuthenticated, (req, res) => {
+router.post("/add", isAuthenticated, (req, res) => {
   const courseDetails = {
     courseName: req.body.courseName,
     description: req.body.description,
-    topics: [], // attention!
-    image: req.body.image,
-    location: req.body.location,
-    duration: req.body.duration,
-    schedule: req.body.schedule,
-    careerServices: req.body.careerServices,
-    jobGuaranteed: req.body.jobGuaranteed,
-    preRequesites: req.body.preRequesites,
-    cost: req.body.cost,
-    link: req.body.link,
+    // topics: [], // attention!
+    // image: req.body.image,
+    // location: req.body.location,
+    // duration: req.body.duration,
+    // schedule: req.body.schedule,
+    // careerServices: req.body.careerServices,
+    // jobGuaranteed: req.body.jobGuaranteed,
+    // preRequesites: req.body.preRequesites,
+    // cost: req.body.cost,
+    // link: req.body.link,
   };
 
   Course.create(courseDetails)
@@ -53,7 +54,7 @@ router.get("/:courseId", (req, res, next) => {
     .catch((err) => res.status(500).json(err));
 });
 
-router.put("/:courseId", isAuthenticated, (req, res, next) => {
+router.put("/edit/:courseId", isAuthenticated, (req, res, next) => {
   const { courseId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(courseId)) {
@@ -81,7 +82,7 @@ router.put("/:courseId", isAuthenticated, (req, res, next) => {
     .catch((error) => res.status(500).json(error));
 });
 
-router.delete("/:courseId", isAuthenticated, (req, res, next) => {
+router.delete("/delete/:courseId", isAuthenticated, (req, res, next) => {
   const { courseId } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(courseId)) {
