@@ -16,15 +16,13 @@ router.post("/add", isAuthenticated, (req, res) => {
     courseName: req.body.courseName,
     description: req.body.description,
     // topics: [], // attention!
-    // image: req.body.image,
-    // location: req.body.location,
-    // duration: req.body.duration,
-    // schedule: req.body.schedule,
-    // careerServices: req.body.careerServices,
-    // jobGuaranteed: req.body.jobGuaranteed,
-    // preRequesites: req.body.preRequesites,
-    // cost: req.body.cost,
-    // link: req.body.link,
+    // image: req.body.image, // attention: load files
+    location: req.body.location,
+    duration: req.body.duration,
+    // schedule: req.body.schedule, // attention: enum
+    preRequesites: req.body.preRequesites,
+    cost: req.body.cost,
+    link: req.body.link,
   };
 
   Course.create(courseDetails)
@@ -65,13 +63,11 @@ router.put("/edit/:courseId", isAuthenticated, (req, res, next) => {
   const courseDetails = {
     courseName: req.body.courseName,
     description: req.body.description,
-    topics: [], // attention!
-    image: req.body.image,
+    // topics: [], // attention!
+    // image: req.body.image, // attention: load files
     location: req.body.location,
     duration: req.body.duration,
-    schedule: req.body.schedule,
-    careerServices: req.body.careerServices,
-    jobGuaranteed: req.body.jobGuaranteed,
+    // schedule: req.body.schedule, // attention: enum
     preRequesites: req.body.preRequesites,
     cost: req.body.cost,
     link: req.body.link,

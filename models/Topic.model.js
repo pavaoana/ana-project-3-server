@@ -4,7 +4,7 @@ const topicSchema = new Schema(
   {
     topicName: {
       type: String,
-      unique: true,
+      // unique: true,
       required: [true, "Please provide a name for the topic you are creating."],
     },
     description: String,

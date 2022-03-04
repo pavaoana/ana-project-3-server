@@ -25,20 +25,8 @@ const courseSchema = new Schema(
 
     schedule: {
       type: String,
-      enum: ["Full-Time", "Part-Time", "Other"],
+      enum: ["Full-Time", "Part-Time", "You Choose"],
       required: [true, "You must select one option."],
-    },
-
-    careerServices: {
-      type: Boolean,
-      enum: ["Yes", "No"],
-      required: [true, "This is a required field."],
-    },
-
-    jobGuaranteed: {
-      type: String,
-      enum: ["Yes", "Internship", "No"],
-      required: [true, "This is a required field."],
     },
 
     preRequisites: String,
