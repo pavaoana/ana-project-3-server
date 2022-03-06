@@ -13,33 +13,32 @@ const courseSchema = new Schema(
 
     // image: String,
 
-    // location: {
-    //   type: String,
-    //   required: [true, "The course location is required."],
-    // },
+    location: {
+      type: String,
+      required: [true, "The course location is required."],
+    },
 
-    // duration: {
-    //   type: String,
-    //   required: [true, "The duration of the course is required."],
-    // },
+    duration: {
+      type: String,
+      required: [true, "The duration of the course is required."],
+    },
 
-    // schedule: {
-    //   type: String,
-    //   enum: ["Full-Time", "Part-Time", "You Choose"],
-    //   required: [true, "You must select one option."],
-    // },
+    schedule: {
+      type: String,
+      required: [true, "The schedule of the course is required."],
+    },
 
-    // preRequisites: String,
+    preRequisites: String,
 
-    // cost: {
-    //   type: Number,
-    //   required: [true, "This is a required field."],
-    // },
+    cost: {
+      type: Number,
+      required: [true, "The cost of the course is required."],
+    },
 
-    // link: {
-    //   type: String,
-    //   required: [true, "This is a required field."],
-    // },
+    link: {
+      type: String,
+      required: [true, "The link for the course is required."],
+    },
   },
   {
     timestamps: true,
