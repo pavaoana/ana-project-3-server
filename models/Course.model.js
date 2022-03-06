@@ -9,7 +9,7 @@ const courseSchema = new Schema(
 
     description: String,
 
-    // topics: [{ type: Schema.Types.ObjectId, ref: "Topic" }],
+    topics: [{ type: Schema.Types.ObjectId, ref: "Topic" }],
 
     // image: String,
 

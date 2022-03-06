@@ -7,7 +7,6 @@ const Course = require("../models/Course.model");
 
 router.post("/add", isAuthenticated, (req, res) => {
   const { courseId } = req.body;
-  // console.log(courseId);
 
   const topicDetails = {
     topicName: req.body.topicName,

@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 
 router.get("/all", (req, res, next) => {
   Course.find()
-    //.populate("topics")
+    .populate("topics")
     .then((allCourses) => {
       console.log("allCourses:", allCourses);
       res.json(allCourses);
@@ -18,7 +18,7 @@ router.post("/add", isAuthenticated, (req, res) => {
   const courseDetails = {
     courseName: req.body.courseName,
     description: req.body.description,
-    // topics: [], // attention!
+    topics: [], // attention!
     // image: req.body.image, // attention: load files
     location: req.body.location,
     duration: req.body.duration,
@@ -26,6 +26,7 @@ router.post("/add", isAuthenticated, (req, res) => {
     preRequisites: req.body.preRequisites,
     cost: req.body.cost,
     link: req.body.link,
+    author: req.body.author,
   };
 
   Course.create(courseDetails)
@@ -51,7 +52,7 @@ router.get("/:courseId", (req, res, next) => {
   }
 
   Course.findById(courseId)
-    //.populate("topics")
+    .populate("topics")
     .then((course) => res.json(course))
     .catch((err) => res.status(500).json(err));
 });
@@ -67,7 +68,7 @@ router.put("/edit/:courseId", isAuthenticated, (req, res, next) => {
   const courseDetails = {
     courseName: req.body.courseName,
     description: req.body.description,
-    // topics: [], // attention!
+    topics: req.body.topics,
     // image: req.body.image, // attention: load files
     location: req.body.location,
     duration: req.body.duration,
@@ -75,10 +76,11 @@ router.put("/edit/:courseId", isAuthenticated, (req, res, next) => {
     preRequisites: req.body.preRequisites,
     cost: req.body.cost,
     link: req.body.link,
+    author: req.body.author,
   };
 
   Course.findByIdAndUpdate(courseId, courseDetails, { new: true })
-    //.then((updatedCourse) => res.json(updatedCourse))
+    .then((updatedCourse) => res.json(updatedCourse))
     .then(() => res.json({ successMessage: "Course Updated!" }))
     .catch((error) => res.status(500).json(error));
 });
