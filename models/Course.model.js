@@ -39,6 +39,8 @@ const courseSchema = new Schema(
       type: String,
       required: [true, "The link for the course is required."],
     },
+
+    author: { type: Schema.Types.ObjectId, ref: "User" },
   },
   {
     timestamps: true,

@@ -20,12 +20,12 @@ router.post("/add", isAuthenticated, (req, res) => {
     description: req.body.description,
     // topics: [], // attention!
     // image: req.body.image, // attention: load files
-    // location: req.body.location,
-    // duration: req.body.duration,
-    // // schedule: req.body.schedule, // attention: enum
-    // preRequesites: req.body.preRequesites,
-    // cost: req.body.cost,
-    // link: req.body.link,
+    location: req.body.location,
+    duration: req.body.duration,
+    schedule: req.body.schedule,
+    preRequisites: req.body.preRequisites,
+    cost: req.body.cost,
+    link: req.body.link,
   };
 
   Course.create(courseDetails)
@@ -72,14 +72,14 @@ router.put("/edit/:courseId", isAuthenticated, (req, res, next) => {
     location: req.body.location,
     duration: req.body.duration,
     schedule: req.body.schedule,
-    preRequesites: req.body.preRequesites,
+    preRequisites: req.body.preRequisites,
     cost: req.body.cost,
     link: req.body.link,
   };
 
   Course.findByIdAndUpdate(courseId, courseDetails, { new: true })
     //.then((updatedCourse) => res.json(updatedCourse))
-    .then(() => res.json({ successMessage: "Success Message Hello" }))
+    .then(() => res.json({ successMessage: "Course Updated!" }))
     .catch((error) => res.status(500).json(error));
 });
 
