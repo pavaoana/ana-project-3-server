@@ -3,6 +3,7 @@ const { isAuthenticated } = require("../middleware/jwt.middleware");
 const Course = require("../models/Course.model");
 const Topic = require("../models/Topic.model");
 const mongoose = require("mongoose");
+const fileUploader = require("../config/cloudinary.config");
 
 router.get("/all", (req, res, next) => {
   Course.find()
@@ -14,12 +15,35 @@ router.get("/all", (req, res, next) => {
     .catch((err) => res.json(err));
 });
 
+// POST "/api/upload" => Route that receives the image, sends it to Cloudinary via the fileUploader and returns the image URL
+router.post("/upload", fileUploader.single("image"), (req, res, next) => {
+  // console.log("file is: ", req.file)
+  if (!req.file) {
+    next(new Error("No file uploaded!"));
+    return;
+  }
+
+  // Get the URL of the uploaded file and send it as a response.
+  // 'fileUrl' can be any name, just make sure you remember to use the same when accessing it on the frontend
+  res.json({ fileUrl: req.file.path });
+});
+
 router.post("/add", isAuthenticated, (req, res) => {
+  const topicsArr = [];
+
+  for (const propertyName in req.body.selectedTopics) {
+    if (req.body.selectedTopics[propertyName] === true) {
+      topicsArr.push(propertyName);
+    }
+    console.log("property:", propertyName);
+    console.log("value: ", req.body.selectedTopics[propertyName]);
+  }
+
   const courseDetails = {
     courseName: req.body.courseName,
     description: req.body.description,
-    topics: [], // attention!
-    // image: req.body.image, // attention: load files
+    topics: topicsArr,
+    //image: req.file.path, // attention
     location: req.body.location,
     duration: req.body.duration,
     schedule: req.body.schedule,
@@ -28,6 +52,8 @@ router.post("/add", isAuthenticated, (req, res) => {
     link: req.body.link,
     author: req.body.author,
   };
+
+  console.log(courseDetails);
 
   Course.create(courseDetails)
     .then((courseCreated) => {
@@ -68,8 +94,8 @@ router.put("/edit/:courseId", isAuthenticated, (req, res, next) => {
   const courseDetails = {
     courseName: req.body.courseName,
     description: req.body.description,
-    topics: req.body.topics,
-    // image: req.body.image, // attention: load files
+    topics: topicsArr,
+    image: req.body.image,
     location: req.body.location,
     duration: req.body.duration,
     schedule: req.body.schedule,

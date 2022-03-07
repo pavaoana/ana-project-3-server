@@ -5,6 +5,15 @@ const { isAuthenticated } = require("../middleware/jwt.middleware");
 const Topic = require("../models/Topic.model");
 const Course = require("../models/Course.model");
 
+router.get("/all", (req, res, next) => {
+  Topic.find()
+    .then((allTopics) => {
+      console.log("allTopics:", allTopics);
+      res.json(allTopics);
+    })
+    .catch((err) => res.json(err));
+});
+
 router.post("/add", isAuthenticated, (req, res) => {
   const { courseId } = req.body;
 
@@ -28,6 +37,19 @@ router.post("/add", isAuthenticated, (req, res) => {
         error: err,
       });
     });
+});
+
+router.get("/:topicId", (req, res, next) => {
+  const { topicId } = req.params;
+
+  if (!mongoose.Types.ObjectId.isValid(topicId)) {
+    res.status(400).json({ message: "The specified topic id is not valid." });
+    return;
+  }
+
+  Topic.findById(topicId)
+    .then((topic) => res.json(topic))
+    .catch((err) => res.status(500).json(err));
 });
 
 module.exports = router;
