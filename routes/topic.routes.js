@@ -8,7 +8,6 @@ const Course = require("../models/Course.model");
 router.get("/all", (req, res, next) => {
   Topic.find()
     .then((allTopics) => {
-      console.log("allTopics:", allTopics);
       res.json(allTopics);
     })
     .catch((err) => res.json(err));

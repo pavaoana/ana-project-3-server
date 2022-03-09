@@ -18,11 +18,13 @@ router.get("/all", (req, res, next) => {
 
 router.get("/my-courses", (req, res, next) => {
   Course.find()
+    .then((course) => {
+      if (req.payload._id === course.author.toString()) {
+        res.json(course);
+      }
+    })
     .populate("topics")
     .populate("author")
-    .then((allCourses) => {
-      res.json(allCourses);
-    })
     .catch((err) => res.json(err));
 });
 
@@ -64,11 +66,8 @@ router.post("/add", isAuthenticated, (req, res) => {
     author: req.payload._id,
   };
 
-  console.log("course details:", courseDetails);
-
   Course.create(courseDetails)
     .then((courseCreated) => {
-      console.log("courseCreated:", courseCreated);
       res.status(201).json(courseCreated);
     })
     .catch((err) => {
