@@ -15,7 +15,7 @@ const User = require("../models/User.model");
 const generateToken = (user) => {
   const payload = {
     _id: user._id,
-    email: user.email,
+    organizationName: user.organizationName,
   };
 
   const authToken = jwt.sign(payload, process.env.TOKEN_SECRET, {

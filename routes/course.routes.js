@@ -1,6 +1,7 @@
 const router = require("express").Router();
-const { isAuthenticated } = require("../middleware/jwt.middleware");
+const { isAuthenticated, user } = require("../middleware/jwt.middleware");
 const Course = require("../models/Course.model");
+const User = require("../models/User.model");
 const Topic = require("../models/Topic.model");
 const mongoose = require("mongoose");
 const fileUploader = require("../config/cloudinary.config");
@@ -8,8 +9,8 @@ const fileUploader = require("../config/cloudinary.config");
 router.get("/all", (req, res, next) => {
   Course.find()
     .populate("topics")
+    .populate("author")
     .then((allCourses) => {
-      console.log("allCourses:", allCourses);
       res.json(allCourses);
     })
     .catch((err) => res.json(err));
@@ -35,9 +36,9 @@ router.post("/add", isAuthenticated, (req, res) => {
     if (req.body.selectedTopics[propertyName] === true) {
       topicsArr.push(propertyName);
     }
-    console.log("property:", propertyName);
-    console.log("value: ", req.body.selectedTopics[propertyName]);
   }
+
+  //const authorInfo = {}; // what
 
   const courseDetails = {
     courseName: req.body.courseName,
@@ -50,10 +51,10 @@ router.post("/add", isAuthenticated, (req, res) => {
     preRequisites: req.body.preRequisites,
     cost: req.body.cost,
     link: req.body.link,
-    author: req.body.author,
+    author: req.payload._id,
   };
 
-  console.log(courseDetails);
+  console.log("course details:", courseDetails);
 
   Course.create(courseDetails)
     .then((courseCreated) => {
@@ -79,12 +80,20 @@ router.get("/:courseId", (req, res, next) => {
 
   Course.findById(courseId)
     .populate("topics")
+    .populate("author")
     .then((course) => res.json(course))
     .catch((err) => res.status(500).json(err));
 });
 
 router.put("/edit/:courseId", isAuthenticated, (req, res, next) => {
   const { courseId } = req.params;
+  const topicsArr = [];
+
+  for (const propertyName in req.body.selectedTopics) {
+    if (req.body.selectedTopics[propertyName] === true) {
+      topicsArr.push(propertyName);
+    }
+  }
 
   if (!mongoose.Types.ObjectId.isValid(courseId)) {
     res.status(400).json({ message: "The specified course id is not valid" });
@@ -102,13 +111,22 @@ router.put("/edit/:courseId", isAuthenticated, (req, res, next) => {
     preRequisites: req.body.preRequisites,
     cost: req.body.cost,
     link: req.body.link,
-    author: req.body.author,
+    author: req.payload._id,
   };
 
-  Course.findByIdAndUpdate(courseId, courseDetails, { new: true })
-    .then((updatedCourse) => res.json(updatedCourse))
-    .then(() => res.json({ successMessage: "Course Updated!" }))
-    .catch((error) => res.status(500).json(error));
+  Course.findById(courseId).then((course) => {
+    if (req.payload._id != course.author.toString()) {
+      res
+        .status(401)
+        .json({ message: "Only the author of the course can update it." });
+      return;
+    }
+
+    Course.findByIdAndUpdate(courseId, courseDetails, { new: true })
+      //.then((updatedCourse) => res.json(updatedCourse))
+      .then(() => res.json({ successMessage: "Course Updated!" }))
+      .catch((error) => res.status(500).json(error));
+  });
 });
 
 router.delete("/delete/:courseId", isAuthenticated, (req, res, next) => {
@@ -119,13 +137,22 @@ router.delete("/delete/:courseId", isAuthenticated, (req, res, next) => {
     return;
   }
 
-  Course.findByIdAndRemove(courseId)
-    .then(() =>
-      res.json({
-        message: `The course ${courseId} was successfully deleted.`,
-      })
-    )
-    .catch((error) => res.status(500).json(error));
+  Course.findById(courseId).then((course) => {
+    if (req.payload._id != course.author.toString()) {
+      res
+        .status(401)
+        .json({ message: "Only the author of the course can delete it." });
+      return;
+    }
+
+    Course.findByIdAndRemove(courseId)
+      .then(() =>
+        res.json({
+          successMessage: `Course deleted!`,
+        })
+      )
+      .catch((error) => res.status(500).json(error));
+  });
 });
 
 module.exports = router;
