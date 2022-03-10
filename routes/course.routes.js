@@ -132,7 +132,6 @@ router.put("/edit/:courseId", isAuthenticated, (req, res, next) => {
     }
 
     Course.findByIdAndUpdate(courseId, courseDetails, { new: true })
-      //.then((updatedCourse) => res.json(updatedCourse))
       .then(() => res.json({ successMessage: "Course Updated!" }))
       .catch((error) => res.status(500).json(error));
   });
