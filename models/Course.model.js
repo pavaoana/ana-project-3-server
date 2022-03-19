@@ -25,7 +25,7 @@ const courseSchema = new Schema(
 
     schedule: {
       type: String,
-      required: [true, "The schedule of the course is required."],
+      required: [true, "The time schedule of the course is required."],
     },
 
     preRequisites: String,

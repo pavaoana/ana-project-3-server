@@ -30,6 +30,7 @@ router.get("/loggedin", (req, res) => {
   res.json(req.user);
 });
 
+// registering as a new user
 router.post("/signup", (req, res) => {
   const { organizationName, email, password } = req.body;
 
@@ -102,6 +103,7 @@ router.post("/signup", (req, res) => {
   });
 });
 
+// logging in
 router.post("/login", (req, res, next) => {
   const { email, password } = req.body;
 

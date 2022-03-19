@@ -6,6 +6,7 @@ const Topic = require("../models/Topic.model");
 const mongoose = require("mongoose");
 const fileUploader = require("../config/cloudinary.config");
 
+// displaying all the courses listed
 router.get("/all", (req, res, next) => {
   Course.find()
     .populate("topics")
@@ -16,6 +17,7 @@ router.get("/all", (req, res, next) => {
     .catch((err) => res.json(err));
 });
 
+// displaying all the courses created by that user
 router.get("/my-courses", (req, res, next) => {
   Course.find()
     .then((course) => {
@@ -28,6 +30,7 @@ router.get("/my-courses", (req, res, next) => {
     .catch((err) => res.json(err));
 });
 
+// we're currently not uploading images - had to focus on the basics and didn't have time to finish this functionality:
 // POST "/api/upload" => Route that receives the image, sends it to Cloudinary via the fileUploader and returns the image URL
 router.post("/upload", fileUploader.single("image"), (req, res, next) => {
   // console.log("file is: ", req.file)
@@ -41,16 +44,16 @@ router.post("/upload", fileUploader.single("image"), (req, res, next) => {
   res.json({ fileUrl: req.file.path });
 });
 
+// create a new course
 router.post("/add", isAuthenticated, (req, res) => {
   const topicsArr = [];
 
+  // chacking if the topics' checkboxes had been selected; if so (true), push those topics into the course info.
   for (const propertyName in req.body.selectedTopics) {
     if (req.body.selectedTopics[propertyName] === true) {
       topicsArr.push(propertyName);
     }
   }
-
-  //const authorInfo = {}; // what
 
   const courseDetails = {
     courseName: req.body.courseName,
@@ -79,6 +82,7 @@ router.post("/add", isAuthenticated, (req, res) => {
     });
 });
 
+// finding a specific course
 router.get("/:courseId", (req, res, next) => {
   const { courseId } = req.params;
 
@@ -94,6 +98,7 @@ router.get("/:courseId", (req, res, next) => {
     .catch((err) => res.status(500).json(err));
 });
 
+// updating a course (if the user is logged in and is the author)
 router.put("/edit/:courseId", isAuthenticated, (req, res, next) => {
   const { courseId } = req.params;
   const topicsArr = [];
@@ -137,6 +142,7 @@ router.put("/edit/:courseId", isAuthenticated, (req, res, next) => {
   });
 });
 
+// deleting a course (if logged in and is the author)
 router.delete("/delete/:courseId", isAuthenticated, (req, res, next) => {
   const { courseId } = req.params;
 

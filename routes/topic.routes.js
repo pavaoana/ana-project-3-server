@@ -2,9 +2,11 @@ const router = require("express").Router();
 
 const { isAuthenticated } = require("../middleware/jwt.middleware");
 
+// Require the Course and Topic models in order to interact with the database
 const Topic = require("../models/Topic.model");
 const Course = require("../models/Course.model");
 
+// for the MVP we're not using this route to display all the topics
 router.get("/all", (req, res, next) => {
   Topic.find()
     .then((allTopics) => {
@@ -13,6 +15,7 @@ router.get("/all", (req, res, next) => {
     .catch((err) => res.json(err));
 });
 
+// creating a new topic (only if they're a logged in user)
 router.post("/add", isAuthenticated, (req, res) => {
   const { courseId } = req.body;
 
@@ -38,6 +41,7 @@ router.post("/add", isAuthenticated, (req, res) => {
     });
 });
 
+// gettig information about a specific topic
 router.get("/:topicId", (req, res, next) => {
   const { topicId } = req.params;
 
